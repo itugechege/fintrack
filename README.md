@@ -1,2 +1,0 @@
-# fintrack
-financial tracker project

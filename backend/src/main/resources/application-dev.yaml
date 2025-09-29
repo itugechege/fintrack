@@ -1,0 +1,128 @@
+spring:
+  application:
+    name: server
+
+  batch:
+    job:
+      enables: true #Run jobs automaticaly on startup.
+    jdbc:
+      initialize-schema: always #Creates batch tables.
+
+  datasource:
+    url: jdbc:posrgresql://localhost:5432/dev_db
+    username: admin
+    password: root
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      dll-auto: validate # validate schema (Use flyway in production)
+  show-sql: true
+  properties:
+    hibernate:
+      format_sql: true
+  database-platfrom: org.hibernate.dialect.PostgreSQLDialect
+
+  #Mongo Db
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017
+  
+  #Flyway migration setting
+  flyway:
+    enabled: true
+    url: jdbc:posrgresql://localhost:5432/dev_db
+    user: admin
+    password: root
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+
+  #Templating
+  freemarker:
+    template-loader-path: classpath:/templates/
+    suffix: .ft1
+    charset: UTF-8
+    cache: false #gud for dev
+
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
+    cache: false   # disable in dev mode
+  
+  #GraphQL
+  graphql:
+    graphiql:
+      enabled: true #optional: serve Graphic UI at /grahiql
+
+  #Kafka
+  kafka:
+    bootstrap-servers: localhost:9092
+
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serizler: org.apache.kafak.common.serialization.StringDesesializer
+      auto-offset-reset: earliest
+
+  
+  #Communication
+  mail:
+    host: smtp.gmail.com #Check on how to host mulitple email account on the same service.
+    port: 587
+    username: your_email@gmail.com
+    password: your_app_password
+    properties: 
+      mail: 
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+#Security
+security:
+  oauth2:
+    client:
+      registration:
+        google:
+          client-id: your-google-client-id
+          client-secret: your-google-client-secret 
+          scope: openid, profile, email, phone
+          redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+
+        github:
+          client-id: your-github-client-id
+          client-secret: your-github-client-secret
+          scope: read:user, read:email
+          redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+
+      provider:
+          github:
+            authorization-uri: https://github.com/login/oauth/authorize
+            token-uri: https://github.com/login/oauth/access_token
+            user-info-uri: https://api.github.com/user
+            user-name-attribute: login 
+  #Quarts for schedueling 
+  quartz: 
+    job-store-type: memory #or jdbc if you want persistence.
+    properties:
+      org:
+        quartz:
+          scheduler:
+            instanceName: QuartzScheduler
+          threadPool:
+            threadCount: 5
+  #Session mngt
+  session:
+    mongodb:
+      colletion-name: app_sessions
+
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics, env, beans, loggers
+  endpoint:
+    health:
+      show-details: always
