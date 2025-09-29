@@ -7,15 +7,15 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 class JacksonConfig {
-    @Bean
-    fun objectMapper(): ObjectMapper {
-        return ObjectMapper().registerModule(KotlinModule())
-    }
+//    @Bean
+//    fun objectMapper(): ObjectMapper {
+//        return ObjectMapper().registerModule(KotlinModule())
+//    }
 
     @Bean
     fun objectMapper(): ObjectMapper {
         return ObjectMapper()
-            .registerModule(KotlinModule())
+            .registerModule(KotlinModule.Builder().build())
             .findAndRegisterModules()
             .apply {
                 enable(com.fasterxml.jackson.databind.SerializationFeature.INDENT_OUTPUT)

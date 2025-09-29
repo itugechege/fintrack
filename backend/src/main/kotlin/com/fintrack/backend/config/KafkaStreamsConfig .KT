@@ -1,68 +1,57 @@
-package com.fintrack.backend.configuration
+package com.fintrack.backend.config
 
-
+import jakarta.annotation.PostConstruct
+import jakarta.annotation.PreDestroy
+import org.apache.kafka.common.serialization.Serdes
+import org.apache.kafka.streams.KafkaStreams
+import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.StreamsConfig
-import org.apache.kafka.streams.kstream.KStream
 import org.apache.kafka.streams.kstream.Consumed
 import org.apache.kafka.streams.kstream.Produced
-import org.apache.kafka.streams.KafkaStreams
-import org.apache.kafka.streams.Topology
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import java.util.Properties
+import java.util.*
 
 /**
- * KafkaStreamsConfig sets up the Kafka Streams instance.
- * 
- * This configuration defines:
- * 1. Kafka connection properties (bootstrap servers, application ID, serdes)
- * 2. Stream topology (source and destination topics)
+ * Kafka Streams configuration and lifecycle management.
+ *
+ * - Configures Kafka Streams properties
+ * - Defines a simple topology (input-topic -> output-topic)
+ * - Manages start/stop automatically with Spring lifecycle
  */
 @Configuration
-class KafkaStreamsConfig {
+open class KafkaStreamsConfig {
 
-    /**
-     * Creates a KafkaStreams instance with a simple stream topology.
-     * 
-     * @return KafkaStreams instance which can be started manually
-     */
+    private lateinit var kafkaStreams: KafkaStreams
+
     @Bean
-    fun kafkaStreams(): KafkaStreams {
-        // 1. Kafka Streams configuration properties
+    open fun kafkaStreams(): KafkaStreams {
         val props = Properties().apply {
-            // Unique ID for this Kafka Streams application
             put(StreamsConfig.APPLICATION_ID_CONFIG, "my-kafka-streams-app")
-            // Address of the Kafka broker
             put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092")
-            // Default serializer/deserializer for keys
-            put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, org.apache.kafka.common.serialization.Serdes.StringSerde::class.java)
-            // Default serializer/deserializer for values
-            put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, org.apache.kafka.common.serialization.Serdes.StringSerde::class.java)
+            put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.StringSerde::class.java)
+            put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.StringSerde::class.java)
         }
 
-        // 2. Build the stream topology
         val builder = StreamsBuilder()
 
-        /**
-         * Example stream:
-         * Reads messages from 'input-topic' and writes them to 'output-topic'.
-         * Consumed.with and Produced.with specify Serdes for key/value.
-         */
-        val textLines: KStream<String, String> = builder.stream(
-            "input-topic", 
-            Consumed.with(org.apache.kafka.common.serialization.Serdes.String(), org.apache.kafka.common.serialization.Serdes.String())
-        )
+        // Example: forward from input-topic → output-topic
+        builder.stream("input-topic", Consumed.with(Serdes.String(), Serdes.String()))
+            .to("output-topic", Produced.with(Serdes.String(), Serdes.String()))
 
-        // Forward the messages to the output topic
-        textLines.to(
-            "output-topic", 
-            Produced.with(org.apache.kafka.common.serialization.Serdes.String(), org.apache.kafka.common.serialization.Serdes.String())
-        )
+        kafkaStreams = KafkaStreams(builder.build(), props)
+        return kafkaStreams
+    }
 
-        // 3. Build the topology
-        val topology: Topology = builder.build()
+    @PostConstruct
+    fun start() {
+        kafkaStreams.start()
+        println("✅ Kafka Streams started")
+    }
 
-        // 4. Create KafkaStreams instance with the topology and configuration
-        return KafkaStreams(topology, props)
+    @PreDestroy
+    fun stop() {
+        kafkaStreams.close()
+        println("🛑 Kafka Streams stopped")
     }
 }
