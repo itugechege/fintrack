@@ -1,3 +1,5 @@
+--DATABASE MVP--
+
 -- =======================================
 -- 1️⃣ users table
 -- Stores core authentication, identity, and profile data
