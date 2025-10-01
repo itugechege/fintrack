@@ -1,4 +1,4 @@
-version: '3.9'
+version: "3.9"
 
 services:
   # MongoDB
@@ -29,7 +29,7 @@ services:
 
   # Zookeeper
   zookeeper:
-    image: confluentinc/cp-zookeeper:7.0.1
+    image: confluentinc/cp-zookeeper:7.5.0
     container_name: fintrack-zookeeper
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
@@ -39,7 +39,7 @@ services:
 
   # Kafka
   kafka:
-    image: confluentinc/cp-kafka:7.0.1
+    image: confluentinc/cp-kafka:7.5.0
     container_name: fintrack-kafka
     depends_on:
       - zookeeper
@@ -47,23 +47,25 @@ services:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
     ports:
       - "9092:9092"
 
-  # Spring Boot App
+  # Spring Boot Backend
   backend:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: eclipse-temurin:21-jdk-alpine
     container_name: fintrack-backend
-    ports:
-      - "8080:8080"
     depends_on:
       - postgres
       - mongodb
       - kafka
+    volumes:
+      - ./target:/app
+    working_dir: /app
+    command: ["java", "-jar", "backend-0.0.1-SNAPSHOT.jar"]
+    ports:
+      - "8080:8080"
     environment:
       SPRING_PROFILES_ACTIVE: dev
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/dev_db
@@ -72,6 +74,48 @@ services:
       SPRING_DATA_MONGODB_URI: mongodb://root:secret@mongodb:27017/dev_db
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
 
+  # PostgreSQL Exporter
+  postgres-exporter:
+    image: prometheuscommunity/postgres-exporter
+    container_name: fintrack-postgres-exporter
+    environment:
+      DATA_SOURCE_NAME: "postgresql://admin:root@postgres:5432/dev_db?sslmode=disable"
+    ports:
+      - "9187:9187"
+    depends_on:
+      - postgres
+
+  # Kafka Exporter
+  kafka-exporter:
+    image: danielqsj/kafka-exporter
+    container_name: fintrack-kafka-exporter
+    command: ["--kafka.server=kafka:9092"]
+    ports:
+      - "9308:9308"
+    depends_on:
+      - kafka
+
+  # Prometheus
+  prometheus:
+    image: prom/prometheus
+    container_name: fintrack-prometheus
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+
+  # Grafana
+  grafana:
+    image: grafana/grafana
+    container_name: fintrack-grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+    depends_on:
+      - prometheus
+
 volumes:
   mongo_data:
   postgres_data:
+  grafana_data:

@@ -1,118 +1,121 @@
-spring:
-  application:
-    name: server
-
-  profiles:
-    active: dev
-
-  batch:
-    job:
-      enables: true
-    jdbc:
-      initialize-schema: always
-
-  datasource:
-    url: jdbc:postgresql://localhost:5432/dev_db
-    username: admin
-    password: root
-    driver-class-name: org.postgresql.Driver
-
-  jpa:
-    hibernate:
-      ddl-auto: validate
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-
-  data:
-    mongodb:
-      uri: mongodb://localhost:27017
-
-  flyway:
-    enabled: true
-    url: jdbc:postgresql://localhost:5432/dev_db
-    user: admin
-    password: root
-    locations: classpath:db/migration
-    baseline-on-migrate: true
-
-  freemarker:
-    template-loader-path: classpath:/templates/
-    suffix: .ftl
-    charset: UTF-8
-    cache: false
-
-  thymeleaf:
-    prefix: classpath:/templates/
-    suffix: .html
-    mode: HTML
-    cache: false
-
-  graphql:
-    graphiql:
-      enabled: true
-
-  kafka:
-    bootstrap-servers: localhost:9092
-    producer:
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.apache.kafka.common.serialization.StringDeserializer
-      auto-offset-reset: earliest
-
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: your_email@gmail.com
-    password: your_app_password
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
-
-security:
-  oauth2:
-    client:
-      registration:
-        google:
-          client-id: your-google-client-id
-          client-secret: your-google-client-secret
-          scope: openid, profile, email, phone
-          redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
-        github:
-          client-id: your-github-client-id
-          client-secret: your-github-client-secret
-          scope: read:user, read:email
-          redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
-      provider:
-        github:
-          authorization-uri: https://github.com/login/oauth/authorize
-          token-uri: https://github.com/login/oauth/access_token
-          user-info-uri: https://api.github.com/user
-          user-name-attribute: login
-
-quartz:
-  job-store-type: memory
-  properties:
-    org:
-      quartz:
-        scheduler:
-          instanceName: QuartzScheduler
-        threadPool:
-          threadCount: 5
-
-session:
-  mongodb:
-    collection-name: app_sessions
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health, info, metrics, env, beans, loggers
-  endpoint:
-    health:
-      show-details: always
+#spring:
+#  application:
+#    name: server
+#
+#  profiles:
+#    active: dev
+#
+#  batch:
+#    job:
+#      enabled: true
+#    jdbc:
+#      initialize-schema: always
+#
+#    datasource:
+#      url: jdbc:postgresql://localhost:5432/dev_db
+#      username: admin
+#      password: root
+#      driver-class-name: org.postgresql.Driver
+#
+#    jpa:
+#      hibernate:
+#        ddl-auto: validate
+#      show-sql: true
+#      properties:
+#        hibernate:
+#          format_sql: true
+#      database-platform: org.hibernate.dialect.PostgreSQLDialect
+#
+#    data:
+#      mongodb:
+#        uri: mongodb://localhost:27017
+#
+#    flyway:
+#      enabled: true
+#      url: jdbc:postgresql://localhost:5432/dev_db
+#      user: admin
+#      password: root
+#      locations: classpath:db/migration
+#      baseline-on-migrate: true
+#
+#    freemarker:
+#      template-loader-path: classpath:/templates/
+#      suffix: .ftl
+#      charset: UTF-8
+#      cache: false
+#
+#    thymeleaf:
+#      prefix: classpath:/templates/
+#      suffix: .html
+#      mode: HTML
+#      cache: false
+#
+#    graphql:
+#      graphiql:
+#        enabled: true
+#
+#    kafka:
+#      bootstrap-servers: localhost:9092
+#      producer:
+#        key-serializer: org.apache.kafka.common.serialization.StringSerializer
+#        value-serializer: org.apache.kafka.common.serialization.StringSerializer
+#      consumer:
+#        key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#        value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#        auto-offset-reset: earliest
+#
+#    mail:
+#      host: smtp.gmail.com
+#      port: 587
+#      username: your_email@gmail.com
+#      password: your_app_password
+#      properties:
+#        mail:
+#          smtp:
+#            auth: true
+#            starttls:
+#              enable: true
+#
+#  security:
+#    oauth2:
+#      client:
+#        registration:
+#          google:
+#            client-id: your-google-client-id
+#            client-secret: your-google-client-secret
+#            scope: openid, profile, email
+#            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+#          github:
+#            client-id: your-github-client-id
+#            client-secret: your-github-client-secret
+#            scope: read:user, read:email
+#            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+#        provider:
+#          github:
+#            authorization-uri: https://github.com/login/oauth/authorize
+#            token-uri: https://github.com/login/oauth/access_token
+#            user-info-uri: https://api.github.com/user
+#            user-name-attribute: login
+#
+#  quartz:
+#    job-store-type: memory
+#    properties:
+#      org:
+#        quartz:
+#          scheduler:
+#            instanceName: QuartzScheduler
+#          threadPool:
+#            threadCount: 5
+#
+#  session:
+#    mongodb:
+#      collection-name: app_sessions
+#
+#  management:
+#    endpoints:
+#      web:
+#        exposure:
+#          include: health, info, metrics, env, beans, loggers
+#    endpoint:
+#      health:
+#        show-details: always
