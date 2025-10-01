@@ -21,6 +21,11 @@ spring:
     properties:
       hibernate:
         format_sql: true
+        default_schema: public
+        hbm2ddl:auto: none
+        validator:
+          apply_to_dll: false
+          validate_schema: false
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 
   data:
@@ -28,6 +33,7 @@ spring:
       uri: mongodb://localhost:27017
 
   flyway:
+    schemas: public
     enabled: true
     url: jdbc:postgresql://localhost:5432/dev_db
     user: admin

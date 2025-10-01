@@ -1,0 +1,6 @@
+package com.fintrack.backend.models
+
+enum class ReportType {
+    EXPENSE_SUMMARY, INCOME_SUMMARY, BUDGET_PROGRESS,
+    GOAL_PROGRESS, INVESTMENT_PORTFOLIO, MARKET_TRACKING
+}
