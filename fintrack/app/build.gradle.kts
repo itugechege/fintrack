@@ -64,6 +64,7 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
     // Charts (MPAndroidChart Compose wrapper or KMP chart lib)
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
@@ -73,11 +74,16 @@ dependencies {
 =======
 =======
 >>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
     implementation("androidx.compose.animation:animation-graphics:1.6.0") // or matching your Compose version
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
