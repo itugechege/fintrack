@@ -63,6 +63,7 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
     // Charts (MPAndroidChart Compose wrapper or KMP chart lib)
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
@@ -70,9 +71,14 @@ dependencies {
     // Coroutines (for async data)
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 =======
+=======
+>>>>>>> Stashed changes
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
     implementation("androidx.compose.animation:animation-graphics:1.6.0") // or matching your Compose version
 
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 }

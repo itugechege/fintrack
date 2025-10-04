@@ -7,17 +7,23 @@ espresso-core = "3.6.1"
 hilt = "2.51.1"
 junit = "4.13.2"
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 junitVersion = "1.3.0"
 espressoCore = "3.7.0"
 lifecycleRuntimeKtx = "2.9.4"
 activityCompose = "1.11.0"
 composeBom = "2024.09.00"
 =======
+=======
+>>>>>>> Stashed changes
 kotlin = "2.0.0"
 lifecycle-runtime-ktx = "2.9.0"
 material3 = "1.2.1"
 navigation-runtime-ktx = "2.9.5"
 foundation = "1.9.2"
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
 [libraries]
@@ -37,10 +43,21 @@ androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtim
 junit = { module = "junit:junit", version.ref = "junit" }
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
 # Hilt
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
+=======
+# Hilt
+hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
+hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
+
+# Apollo
+apollo-runtime = { group = "com.apollographql.apollo3", name = "apollo-runtime", version.ref = "apollo" }
+androidx-navigation-runtime-ktx = { group = "androidx.navigation", name = "navigation-runtime-ktx", version.ref = "navigation-runtime-ktx" }
+androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "foundation" }
+>>>>>>> Stashed changes
 
 # Apollo
 apollo-runtime = { group = "com.apollographql.apollo3", name = "apollo-runtime", version.ref = "apollo" }
