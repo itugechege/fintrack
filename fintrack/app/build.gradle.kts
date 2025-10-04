@@ -2,8 +2,12 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-}
 
+    // Add these for Hilt and Apollo GraphQL
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.apollo)
+    kotlin("kapt") // needed for annotation processors like Room & Hilt
+}
 android {
     namespace = "com.example.fintrack"
     compileSdk = 36
@@ -49,6 +53,8 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.navigation.runtime.ktx)
+    implementation(libs.androidx.compose.foundation)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -56,10 +62,17 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+<<<<<<< Updated upstream
 
     // Charts (MPAndroidChart Compose wrapper or KMP chart lib)
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 
     // Coroutines (for async data)
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+=======
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+    implementation("androidx.compose.animation:animation-graphics:1.6.0") // or matching your Compose version
+
+>>>>>>> Stashed changes
 }
