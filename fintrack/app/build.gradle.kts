@@ -56,4 +56,10 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+
+    // Charts (MPAndroidChart Compose wrapper or KMP chart lib)
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+
+    // Coroutines (for async data)
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 }
