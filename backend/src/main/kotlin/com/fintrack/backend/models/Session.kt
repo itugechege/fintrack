@@ -9,15 +9,15 @@ import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
-import lombok.AllArgsConstructor
-import lombok.Getter
 import java.math.BigDecimal
 import java.time.LocalDateTime
+import kotlin.time.Instant
 
 
 @Entity
 @Table(name = "sessions")
-class Session {
+@OptIn(kotlin.time.ExperimentalTime::class)
+class Session(user: User, deviceType: String, deviceModel: String, sessionStart: Instant?, isActive: Boolean) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null

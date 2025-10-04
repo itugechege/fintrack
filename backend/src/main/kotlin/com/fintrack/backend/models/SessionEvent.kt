@@ -26,14 +26,14 @@ class SessionEvent {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    val user: User? = null
+    var user: User? = null
 
     @Column(name = "event_type", nullable = false)
     lateinit var eventType: String
 
     @Column(name = "event_data", columnDefinition = "jsonb")
-    val eventData: String? = null
+    var eventData: String? = null
 
     @Column(name = "event_time")
-    val eventTime: LocalDateTime = LocalDateTime.now()
+    var eventTime: LocalDateTime = LocalDateTime.now()
 }
