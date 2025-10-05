@@ -28,6 +28,7 @@ import com.example.fintrack.ui.navigation.BottomNavigationBar
 
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
  class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,6 +63,8 @@ fun GreetingPreview() {
     }
 }
 =======
+=======
+>>>>>>> Stashed changes
  @OptIn(ExperimentalMaterial3Api::class)
  class MainActivity : ComponentActivity() {
      override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,4 +82,7 @@ fun GreetingPreview() {
 }
 
 
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
