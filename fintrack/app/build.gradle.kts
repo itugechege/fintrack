@@ -3,11 +3,14 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
 
-    // Add these for Hilt and Apollo GraphQL
+    // Hilt & Apollo GraphQL
     alias(libs.plugins.hilt)
     alias(libs.plugins.apollo)
-    kotlin("kapt") // needed for annotation processors like Room & Hilt
+
+    // Kotlin Annotation Processor (needed for Hilt)
+    kotlin("kapt")
 }
+
 android {
     namespace = "com.example.fintrack"
     compileSdk = 36
@@ -31,30 +34,71 @@ android {
             )
         }
     }
+
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
+
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
+
     buildFeatures {
         compose = true
+    }
+
+    packaging {
+        resources.excludes.add("META-INF/*")
     }
 }
 
 dependencies {
-
+    // ────────────────────────────────
+    // Core Android + Lifecycle
+    // ────────────────────────────────
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
+
+    // ────────────────────────────────
+    // Jetpack Compose
+    // ────────────────────────────────
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.navigation.runtime.ktx)
-    implementation(libs.androidx.compose.foundation)
+    implementation("androidx.compose.animation:animation-graphics:1.6.0")
+    implementation("androidx.navigation:navigation-compose:2.8.0")
+
+
+    // ────────────────────────────────
+    // Kotlin Coroutines
+    // ────────────────────────────────
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+
+    // ────────────────────────────────
+    // Charts (MPAndroidChart)
+    // ────────────────────────────────
+    implementation("com.github.PhilJay:MPAndroidChart:3.1.0")
+
+    // ────────────────────────────────
+    // Dependency Injection (Hilt)
+    // ────────────────────────────────
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+
+    // ────────────────────────────────
+    // Apollo GraphQL
+    // ────────────────────────────────
+    implementation(libs.apollo.runtime)
+
+    // ────────────────────────────────
+    // Testing
+    // ────────────────────────────────
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -62,29 +106,4 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-
-    // Charts (MPAndroidChart Compose wrapper or KMP chart lib)
-    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
-
-    // Coroutines (for async data)
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
-=======
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
-    implementation("androidx.compose.animation:animation-graphics:1.6.0") // or matching your Compose version
-
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 }

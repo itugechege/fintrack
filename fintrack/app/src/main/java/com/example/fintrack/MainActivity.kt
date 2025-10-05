@@ -13,9 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.fintrack.app.ui.theme.FintrackTheme
 
-<<<<<<< Updated upstream
-class MainActivity : ComponentActivity() {
-=======
+
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -28,7 +26,6 @@ import androidx.compose.ui.unit.sp
 
 
  class MainActivity : ComponentActivity() {
->>>>>>> Stashed changes
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
