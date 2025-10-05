@@ -22,8 +22,12 @@ import androidx.compose.ui.Alignment
 
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.compose.rememberNavController
+import com.example.fintrack.ui.navigation.AppNavGraph
+import com.example.fintrack.ui.navigation.BottomNavigationBar
 
 
+<<<<<<< Updated upstream
 
  class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,3 +61,22 @@ fun GreetingPreview() {
         Greeting("Android")
     }
 }
+=======
+ @OptIn(ExperimentalMaterial3Api::class)
+ class MainActivity : ComponentActivity() {
+     override fun onCreate(savedInstanceState: Bundle?) {
+         super.onCreate(savedInstanceState)
+         setContent {
+             val navController = rememberNavController()
+
+             Scaffold(
+                 bottomBar = { BottomNavigationBar(navController) }
+             ) { innerPadding ->
+                 AppNavGraph(navController = navController)
+             }
+         }
+     }
+}
+
+
+>>>>>>> Stashed changes
