@@ -54,64 +54,31 @@ android {
 }
 
 dependencies {
-    // ────────────────────────────────
     // Core Android + Lifecycle
-    // ────────────────────────────────
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
 
-    // ────────────────────────────────
     // Jetpack Compose
-    // ────────────────────────────────
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.compose.material3)
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-    implementation(libs.androidx.navigation.runtime.ktx)
-    implementation("androidx.compose.animation:animation-graphics:1.6.0")
-    implementation("androidx.navigation:navigation-compose:2.8.0")
-
-
-    // ────────────────────────────────
-    // Kotlin Coroutines
-    // ────────────────────────────────
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
-
-    // ────────────────────────────────
-    // Charts (MPAndroidChart)
-    // ────────────────────────────────
-    implementation("com.github.PhilJay:MPAndroidChart:3.1.0")
-
-    // ────────────────────────────────
-    // Dependency Injection (Hilt)
-    // ────────────────────────────────
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
-
-    // ────────────────────────────────
-    // Apollo GraphQL
-    // ────────────────────────────────
-    implementation(libs.apollo.runtime)
-
-    // ────────────────────────────────
-    // Testing
-    // ────────────────────────────────
-=======
-=======
->>>>>>> Stashed changes
     implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.androidx.navigation.runtime.ktx)
     implementation(libs.androidx.navigation.compose)
-    implementation(libs.androidx.compose.foundation)
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
+
+
+    // Dependency Injection (Hilt)
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+
+    // Apollo GraphQL
+    implementation(libs.apollo.runtime)
+
+    // Testing
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

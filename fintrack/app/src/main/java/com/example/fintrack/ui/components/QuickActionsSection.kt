@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Article
 import androidx.compose.material.icons.filled.AccountBalanceWallet
 import androidx.compose.material.icons.filled.Article
 import androidx.compose.material.icons.filled.PieChart
@@ -81,7 +82,7 @@ fun QuickActionsSection(
             item {
                 QuickActionButton(
                     title = "News",
-                    icon = Icons.Filled.Article,
+                    icon = Icons.AutoMirrored.Filled.Article,
                     onClick = onNewsClick
                 )
             }
