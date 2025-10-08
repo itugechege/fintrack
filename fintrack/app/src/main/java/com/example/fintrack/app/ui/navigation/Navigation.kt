@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 
 //import androidx.navigation.NavHostController
-//import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 
 sealed class Screen(val route: String) {
@@ -15,16 +15,16 @@ sealed class Screen(val route: String) {
 
 @Composable
 fun AppNavHost(navController: NavHostController) {
-    _root_ide_package_.androidx.navigation.NavHost(
+    NavHost(
         navController = navController,
         startDestination = Screen.Splash.route
     ) {
         composable(Screen.Splash.route) {
-            SplashScreen(onSplashFinished = {
-                navController.navigate(Screen.Login.route) {
-                    popUpTo(Screen.Splash.route) { inclusive = true }
-                }
-            })
+//            SplashScreen(onSplashFinished = {
+//                navController.navigate(Screen.Login.route) {
+//                    popUpTo(Screen.Splash.route) { inclusive = true }
+//                }
+//            })
         }
 
         // Temporary: blank login screen until we build it

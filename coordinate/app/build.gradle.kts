@@ -2,21 +2,14 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-
-    // Hilt & Apollo GraphQL
-    alias(libs.plugins.hilt)
-    alias(libs.plugins.apollo)
-
-    // Kotlin Annotation Processor (needed for Hilt)
-    kotlin("kapt")
 }
 
 android {
-    namespace = "com.example.fintrack"
+    namespace = "com.example.pawakraft"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.example.fintrack"
+        applicationId = "com.example.pawakraft"
         minSdk = 30
         targetSdk = 36
         versionCode = 1
@@ -34,51 +27,28 @@ android {
             )
         }
     }
-
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
-
     kotlinOptions {
-        jvmTarget = "17"
+        jvmTarget = "11"
     }
-
     buildFeatures {
         compose = true
-    }
-
-    packaging {
-        resources.excludes.add("META-INF/*")
     }
 }
 
 dependencies {
-    // Core Android + Lifecycle
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
-
-    // Jetpack Compose
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
-    implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.compose.material.icons.extended)
-    implementation(libs.androidx.navigation.runtime.ktx)
-    implementation(libs.androidx.navigation.compose)
-
-
-    // Dependency Injection (Hilt)
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
-
-    // Apollo GraphQL
-    implementation(libs.apollo.runtime)
-
-    // Testing
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
