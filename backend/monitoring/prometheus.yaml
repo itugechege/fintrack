@@ -1,0 +1,19 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  # Prometheus own metrics
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  # PostgreSQL exporter
+  - job_name: 'postgres'
+    static_configs:
+      - targets: ['fintrack-postgres-exporter:9187']
+
+  # Kafka exporter
+  - job_name: 'kafka'
+    static_configs:
+      - targets: ['fintrack-kafka-exporter:9308']

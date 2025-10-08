@@ -12,6 +12,8 @@ import org.apache.el.parser.AstFalse
 import org.hibernate.internal.build.AllowSysOut
 import java.time.LocalDate
 import java.time.LocalDateTime
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 
 @Entity
 @Table(name = "users")
@@ -70,6 +72,15 @@ class User {
 
     @Column(name = "updated_at")
     var updatedAt: LocalDateTime = LocalDateTime.now()
+
+    // Add these 👇
+
+    var verificationToken: String? = null
+    @OptIn(ExperimentalTime::class)
+    var verificationTokenExpiry: Instant? = null
+    var passwordResetToken: String? = null
+    @OptIn(ExperimentalTime::class)
+    var passwordResetTokenExpiry: Instant? = null
 
 
 

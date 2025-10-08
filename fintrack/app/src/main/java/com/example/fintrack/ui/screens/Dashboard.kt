@@ -368,3 +368,4 @@ val mockTransactions = listOf(
     Transaction("Netflix Subscription", "Oct 1, 2025", "-$13.99")
 )
 
+
