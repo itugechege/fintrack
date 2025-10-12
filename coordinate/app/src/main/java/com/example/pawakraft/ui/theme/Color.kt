@@ -1,4 +1,4 @@
-package com.example.fintrack.ui.theme
+package com.example.pawakraft.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

@@ -16,9 +16,10 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        gradlePluginPortal()
+        maven("https://jitpack.io")
     }
 }
 
 rootProject.name = "fintrack"
 include(":app")
- 
