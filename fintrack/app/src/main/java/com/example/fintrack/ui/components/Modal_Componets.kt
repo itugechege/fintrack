@@ -1,4 +1,10 @@
 package com.example.fintrack.ui.components
 
-class Modal_Componets {
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.tooling.preview.Preview
+
+@Preview
+@Composable
+fun ButtonActionModal(){
+   Card
 }
