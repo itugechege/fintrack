@@ -1,0 +1,18 @@
+{
+  "id": null,
+  "title": "Kafka Overview",
+  "tags": ["kafka"],
+  "timezone": "browser",
+  "panels": [
+    {
+      "type": "graph",
+      "title": "Messages In/Out",
+      "targets": [
+        {
+          "expr": "kafka_server_brokertopicmetrics_messagesin_total",
+          "legendFormat": "messages in"
+        }
+      ]
+    }
+  ]
+}
