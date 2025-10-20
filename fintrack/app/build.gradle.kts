@@ -73,6 +73,8 @@ dependencies {
 
     // Dependency Injection (Hilt)
     implementation(libs.hilt.android)
+    implementation(libs.androidx.material3)
+    implementation(libs.androidx.foundation)
     kapt(libs.hilt.compiler)
 
     // Apollo GraphQL
