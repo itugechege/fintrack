@@ -22,9 +22,8 @@ fun AppNavGraph(navController: NavHostController) {
         startDestination = BottomNavItem.Home.route
     ) {
         composable(BottomNavItem.Home.route) { HomeScreen() }
-        composable(BottomNavItem.Analytics.route) { Analytics() }
+        composable(BottomNavItem.Budgeting.route) { Analytics() }
         composable(BottomNavItem.Portfolio.route) { Portfolio() }
         composable(BottomNavItem.News.route) { News() }
-        composable(BottomNavItem.Settings.route) { Settings() }
     }
 }

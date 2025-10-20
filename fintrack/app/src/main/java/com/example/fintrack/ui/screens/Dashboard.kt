@@ -48,7 +48,7 @@ fun HomeScreen() {
             item { FinTrackMainCard() }
             item {
                 QuickActionsSection(
-                    onBudgetClick = {},
+                    onBudgetClick = {               },
                     onPortfolioClick = {},
                     onMarketsClick = {},
                     onNewsClick = {}

@@ -1,8 +1,14 @@
 package com.example.fintrack.ui.navigation
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Abc
+import androidx.compose.material.icons.filled.AreaChart
+import androidx.compose.material.icons.filled.AttachMoney
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Money
+import androidx.compose.material.icons.filled.Newspaper
+import androidx.compose.material.icons.filled.PieChart
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -17,12 +23,10 @@ sealed class BottomNavItem(
     val icon: ImageVector
 ) {
     object Home : BottomNavItem("home", "Home", Icons.Default.Home)
-    object Budgets_n_Savings : BottomNavItem("b_n_s", "Budgets & Saving", Icons.Default.Info)
-    object Portfolio: BottomNavItem(route = "portfolio", label = "Portfolio", Icons.Default.Info)
-    object Analytics: BottomNavItem(route = "analytics", label = "Analytics", Icons.Default.Info)
-    object Markets : BottomNavItem("markets", "Markets", Icons.Default.ShoppingCart)
-    object News: BottomNavItem(route = "news", label = "News", Icons.Default.Info)
-    object Settings : BottomNavItem("settings", "Settings", Icons.Default.Settings)
+    object Portfolio: BottomNavItem(route = "portfolio", label = "Portfolio", Icons.Default.AreaChart)
+    object Budgeting: BottomNavItem(route = "budgeting", label = "Budgeting", Icons.Default.AttachMoney)
+    object Markets : BottomNavItem("markets", "Markets", Icons.Default.Abc)
+    object News: BottomNavItem(route = "news", label = "News", Icons.Default.Newspaper)
 }
 
 /**
@@ -30,8 +34,8 @@ sealed class BottomNavItem(
  */
 val bottomNavItems = listOf(
     BottomNavItem.Home,
-    BottomNavItem.Analytics,
+    BottomNavItem.Budgeting,
     BottomNavItem.Portfolio,
     BottomNavItem.News,
-    BottomNavItem.Settings
+//    BottomNavItem.Settings
 )
