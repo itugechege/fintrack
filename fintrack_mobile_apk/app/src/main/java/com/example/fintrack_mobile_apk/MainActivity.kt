@@ -12,6 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBalance
 import androidx.compose.material.icons.filled.Assessment
 import androidx.compose.material.icons.filled.Dashboard
+import androidx.compose.material.icons.filled.Help
 import androidx.compose.material.icons.filled.PieChart
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.filled.SyncAlt
@@ -20,6 +21,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -27,11 +29,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.example.fintrack_mobile_apk.accounts.AccountsScreen
 import com.example.fintrack_mobile_apk.budget.BudgetScreen
+import com.example.fintrack_mobile_apk.clarification.ClarificationScreen
 import com.example.fintrack_mobile_apk.dashboard.DashboardScreen
 import com.example.fintrack_mobile_apk.reports.ReportsScreen
 import com.example.fintrack_mobile_apk.scheduled.ScheduledScreen
+import com.example.fintrack_mobile_apk.setup.SetupScreen
 import com.example.fintrack_mobile_apk.transactions.TransactionsScreen
 import com.example.fintrack_mobile_apk.ui.theme.Fintrack_mobile_apkTheme
 
@@ -46,17 +51,24 @@ class MainActivity : ComponentActivity() {
     private val viewModel: FintrackViewModel by viewModels {
         FintrackViewModelFactory(
             (application as FintrackApplication).repository,
-            (application as FintrackApplication).settingsRepository
+            (application as FintrackApplication).settingsRepository,
+            applicationContext
         )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        installSplashScreen()
         Log.d(TAG, "onCreate: Activity created")
         enableEdgeToEdge()
         setContent {
+            val setupComplete by viewModel.setupComplete.collectAsState()
             Fintrack_mobile_apkTheme {
-                FintrackMobileApkApp(viewModel = viewModel)
+                if (setupComplete) {
+                    FintrackMobileApkApp(viewModel = viewModel)
+                } else {
+                    SetupScreen(onSetupComplete = { viewModel.completeSetup() })
+                }
             }
         }
     }
@@ -98,12 +110,13 @@ fun FintrackMobileApkApp(viewModel: FintrackViewModel) {
         Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
             val modifier = Modifier.padding(innerPadding)
             when (currentDestination) {
-                AppDestinations.DASHBOARD -> DashboardScreen(modifier = modifier, viewModel = viewModel)
+                AppDestinations.DASHBOARD -> DashboardScreen(modifier = modifier, viewModel = viewModel, onNavigate = { currentDestination = it })
                 AppDestinations.ACCOUNTS -> AccountsScreen(modifier = modifier, viewModel = viewModel)
                 AppDestinations.TRANSACTIONS -> TransactionsScreen(modifier = modifier, viewModel = viewModel)
                 AppDestinations.SCHEDULED -> ScheduledScreen(modifier = modifier, viewModel = viewModel)
                 AppDestinations.BUDGET -> BudgetScreen(modifier = modifier, viewModel = viewModel)
                 AppDestinations.REPORTS -> ReportsScreen(modifier = modifier, viewModel = viewModel)
+                AppDestinations.CLARIFICATION -> ClarificationScreen(viewModel = viewModel)
             }
         }
     }
@@ -149,6 +162,12 @@ enum class AppDestinations(
      * This screen is associated with the [ReportsScreen] composable.
      */
     REPORTS("Reports", Icons.Filled.Assessment),
+
+    /**
+     * Screen for clarifying transactions.
+     * This screen is associated with the [ClarificationScreen] composable.
+     */
+    CLARIFICATION("Clarification", Icons.Filled.Help)
 }
 
 /**

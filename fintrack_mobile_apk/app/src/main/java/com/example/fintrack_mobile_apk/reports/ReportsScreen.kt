@@ -11,10 +11,13 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.fintrack_mobile_apk.FintrackViewModel
 import com.example.fintrack_mobile_apk.ui.theme.Fintrack_mobile_apkTheme
 
 private const val TAG = "ReportsScreen"
@@ -26,17 +29,24 @@ private const val TAG = "ReportsScreen"
  * [com.example.fintrack_mobile_apk.AppDestinations.REPORTS] is selected.
  *
  * @param modifier The modifier to be applied to the layout.
+ * @param viewModel The [FintrackViewModel] instance for the app.
  */
 @Composable
-fun ReportsScreen(modifier: Modifier = Modifier) {
+fun ReportsScreen(modifier: Modifier = Modifier, viewModel: FintrackViewModel) {
     Log.d(TAG, "ReportsScreen: Composing")
+    val transactions by viewModel.allTransactions.collectAsState()
+
+    val totalIncome = transactions.filter { it.amount > 0 }.sumOf { it.amount }
+    val totalExpenses = transactions.filter { it.amount < 0 }.sumOf { it.amount }
+    val netIncome = totalIncome + totalExpenses
+
     Column(modifier = modifier.padding(16.dp)) {
         Text(text = "Reports", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
 
         Spacer(modifier = Modifier.height(16.dp))
 
         // Summary
-        SummaryReport()
+        SummaryReport(totalIncome = totalIncome, totalExpenses = totalExpenses, netIncome = netIncome)
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -49,9 +59,13 @@ fun ReportsScreen(modifier: Modifier = Modifier) {
 /**
  * A placeholder composable for the summary report card.
  * This is used on the [ReportsScreen] to display a summary of income, expenses, and net income.
+ *
+ * @param totalIncome The total income.
+ * @param totalExpenses The total expenses.
+ * @param netIncome The net income.
  */
 @Composable
-fun SummaryReport() {
+fun SummaryReport(totalIncome: Double, totalExpenses: Double, netIncome: Double) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -61,9 +75,9 @@ fun SummaryReport() {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(text = "Summary", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
             Spacer(modifier = Modifier.height(8.dp))
-            Text(text = "Total Income: $8,500.00")
-            Text(text = "Total Expenses: $2,500.80")
-            Text(text = "Net Income: $5,999.20")
+            Text(text = "Total Income: $${String.format("%.2f", totalIncome)}")
+            Text(text = "Total Expenses: $${String.format("%.2f", totalExpenses)}")
+            Text(text = "Net Income: $${String.format("%.2f", netIncome)}")
         }
     }
 }
@@ -99,6 +113,6 @@ fun ChartPlaceholder(title: String) {
 @Composable
 fun ReportsScreenPreview() {
     Fintrack_mobile_apkTheme {
-        ReportsScreen()
+        SummaryReport(totalIncome = 8500.00, totalExpenses = -2500.80, netIncome = 5999.20)
     }
 }

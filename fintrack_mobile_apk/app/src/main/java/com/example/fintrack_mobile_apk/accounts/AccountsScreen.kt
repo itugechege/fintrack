@@ -8,19 +8,25 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import com.example.fintrack_mobile_apk.FintrackViewModel
 import com.example.fintrack_mobile_apk.data.Account
 import com.example.fintrack_mobile_apk.ui.theme.Fintrack_mobile_apkTheme
@@ -40,10 +46,27 @@ private const val TAG = "AccountsScreen"
 fun AccountsScreen(modifier: Modifier = Modifier, viewModel: FintrackViewModel) {
     Log.d(TAG, "AccountsScreen: Composing")
     val accounts by viewModel.allAccounts.collectAsState()
+    var showDialog by remember { mutableStateOf(false) }
 
-    LazyColumn(modifier = modifier.padding(16.dp)) {
-        items(accounts.size) {
-            AccountItem(account = accounts[it])
+    Column(modifier = modifier.padding(16.dp)) {
+        Button(onClick = { showDialog = true }) {
+            Text(text = "New Account")
+        }
+
+        if (showDialog) {
+            NewAccountDialog(
+                onDismiss = { showDialog = false },
+                onConfirm = {
+                    viewModel.insertAccount(it)
+                    showDialog = false
+                }
+            )
+        }
+
+        LazyColumn {
+            items(accounts.size) {
+                AccountItem(account = accounts[it])
+            }
         }
     }
 }
@@ -73,6 +96,40 @@ fun AccountItem(account: Account) {
             }
             Spacer(modifier = Modifier.width(16.dp))
             Text(text = "$${account.balance}", style = MaterialTheme.typography.bodyLarge, color = Color(account.balanceColor))
+        }
+    }
+}
+
+@Composable
+private fun NewAccountDialog(onDismiss: () -> Unit, onConfirm: (Account) -> Unit) {
+    var name by remember { mutableStateOf("") }
+    var type by remember { mutableStateOf("") }
+    var balance by remember { mutableStateOf("") }
+
+    Dialog(onDismissRequest = onDismiss) {
+        Card {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Text(text = "New Account", style = MaterialTheme.typography.titleLarge)
+                OutlinedTextField(value = name, onValueChange = { name = it }, label = { Text("Name") })
+                OutlinedTextField(value = type, onValueChange = { type = it }, label = { Text("Type") })
+                OutlinedTextField(value = balance, onValueChange = { balance = it }, label = { Text("Balance") })
+                Row {
+                    Button(onClick = onDismiss) {
+                        Text("Cancel")
+                    }
+                    Button(onClick = {
+                        val account = Account(
+                            name = name,
+                            type = type,
+                            balance = balance.toDouble(),
+                            balanceColor = 0xFF000000
+                        )
+                        onConfirm(account)
+                    }) {
+                        Text("Save")
+                    }
+                }
+            }
         }
     }
 }

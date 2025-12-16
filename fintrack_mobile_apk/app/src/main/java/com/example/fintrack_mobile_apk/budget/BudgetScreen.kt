@@ -14,33 +14,19 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.fintrack_mobile_apk.FintrackViewModel
+import com.example.fintrack_mobile_apk.data.Transaction
 import com.example.fintrack_mobile_apk.ui.theme.Fintrack_mobile_apkTheme
 
 private const val TAG = "BudgetScreen"
-
-/**
- * Data class representing a single budget item.
- * This structure holds the information for each budget category displayed on the [BudgetScreen].
- *
- * @param name The name of the budget category (e.g., "Groceries").
- * @param spent The amount of money spent in this category so far, formatted as a string.
- * @param total The total budgeted amount for this category, formatted as a string.
- * @param progress A float value between 0.0 and 1.0 representing the budget usage, used for the [LinearProgressIndicator].
- * @param progressColor The color of the progress indicator, used to visually represent the budget status (e.g., green for under budget, red for over budget).
- */
-data class BudgetItem(
-    val name: String,
-    val spent: String,
-    val total: String,
-    val progress: Float,
-    val progressColor: Color
-)
 
 /**
  * Composable function for the Budget screen.
@@ -49,40 +35,37 @@ data class BudgetItem(
  * [com.example.fintrack_mobile_apk.AppDestinations.BUDGET] is selected.
  *
  * @param modifier The modifier to be applied to the layout.
+ * @param viewModel The [FintrackViewModel] instance for the app.
  */
 @Composable
-fun BudgetScreen(modifier: Modifier = Modifier) {
+fun BudgetScreen(modifier: Modifier = Modifier, viewModel: FintrackViewModel) {
     Log.d(TAG, "BudgetScreen: Composing")
-    // Placeholder data for the list of budget items. In a real app, this would be fetched from a ViewModel or repository.
-    val budgetItems = listOf(
-        BudgetItem("Groceries", "$450.30", "$600.00", 0.75f, Color(0xFF059669)),
-        BudgetItem("Rent", "$1,500.00", "$1,500.00", 1.0f, Color(0xFFD97706)),
-        BudgetItem("Utilities", "$180.50", "$200.00", 0.9f, Color(0xFF059669)),
-        BudgetItem("Transportation", "$220.00", "$300.00", 0.73f, Color(0xFF059669)),
-        BudgetItem("Entertainment", "$150.00", "$200.00", 0.75f, Color(0xFF059669)),
-    )
+    val transactions by viewModel.allTransactions.collectAsState()
+
+    // For now, we'll just display a list of all transactions.
+    // In the future, we can group them by category and calculate the budget progress.
 
     LazyColumn(modifier = modifier.padding(16.dp)) {
         item {
             Text(text = "Monthly Budget", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
             Spacer(modifier = Modifier.padding(bottom = 16.dp))
         }
-        items(budgetItems.size) {
-            BudgetItemItem(budgetItem = budgetItems[it])
+        items(transactions.size) {
+            BudgetItemItem(transaction = transactions[it])
         }
     }
 }
 
 /**
  * Composable for displaying a single budget item in a [Card].
- * This is a stateless composable that takes a [BudgetItem] object and displays its details,
+ * This is a stateless composable that takes a [Transaction] object and displays its details,
  * including a [LinearProgressIndicator] to visualize budget usage.
  * It is used within the [LazyColumn] of the [BudgetScreen].
  *
- * @param budgetItem The [BudgetItem] data object to display.
+ * @param transaction The [Transaction] data object to display.
  */
 @Composable
-fun BudgetItemItem(budgetItem: BudgetItem) {
+fun BudgetItemItem(transaction: Transaction) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -94,10 +77,10 @@ fun BudgetItemItem(budgetItem: BudgetItem) {
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = budgetItem.name, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                Text(text = transaction.name, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.width(16.dp))
                 Text(
-                    text = "${budgetItem.spent} / ${budgetItem.total}",
+                    text = "$${transaction.amount}",
                     style = MaterialTheme.typography.bodyLarge,
                     modifier = Modifier.weight(1f),
                     textAlign = androidx.compose.ui.text.style.TextAlign.End
@@ -105,9 +88,9 @@ fun BudgetItemItem(budgetItem: BudgetItem) {
             }
             Spacer(modifier = Modifier.padding(top = 8.dp))
             LinearProgressIndicator(
-                progress = { budgetItem.progress },
+                progress = { 0.5f },
                 modifier = Modifier.fillMaxWidth(),
-                color = budgetItem.progressColor
+                color = if (transaction.amount < 0) Color(0xFFD97706) else Color(0xFF059669)
             )
         }
     }
@@ -121,6 +104,6 @@ fun BudgetItemItem(budgetItem: BudgetItem) {
 @Composable
 fun BudgetScreenPreview() {
     Fintrack_mobile_apkTheme {
-        BudgetScreen()
+        BudgetItemItem(transaction = Transaction(name = "Groceries", date = System.currentTimeMillis(), category = "Groceries", amount = -450.30))
     }
 }

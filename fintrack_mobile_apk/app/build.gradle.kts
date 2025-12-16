@@ -7,9 +7,7 @@ plugins {
 
 android {
     namespace = "com.example.fintrack_mobile_apk"
-    compileSdk {
-        version = release(36)
-    }
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.fintrack_mobile_apk"
@@ -22,7 +20,7 @@ android {
     }
 
     buildTypes {
-        release {
+        getByName("release") {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -31,11 +29,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "1.8"
     }
     buildFeatures {
         compose = true
@@ -51,8 +49,10 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+    implementation("com.google.android.material:material:1.12.0")
     implementation("androidx.compose.material:material-icons-extended-android:1.6.8")
     implementation(libs.androidx.compose.material3.adaptive.navigation.suite)
+    implementation("androidx.core:core-splashscreen:1.0.1")
 
     // Room Database
     implementation("androidx.room:room-runtime:2.6.1")

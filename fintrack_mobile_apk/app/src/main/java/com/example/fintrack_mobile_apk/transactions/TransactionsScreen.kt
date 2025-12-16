@@ -8,18 +8,24 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import com.example.fintrack_mobile_apk.FintrackViewModel
 import com.example.fintrack_mobile_apk.data.Transaction
 import com.example.fintrack_mobile_apk.ui.theme.Fintrack_mobile_apkTheme
@@ -41,10 +47,27 @@ private const val TAG = "TransactionsScreen"
 fun TransactionsScreen(modifier: Modifier = Modifier, viewModel: FintrackViewModel) {
     Log.d(TAG, "TransactionsScreen: Composing")
     val transactions by viewModel.allTransactions.collectAsState()
+    var showDialog by remember { mutableStateOf(false) }
 
-    LazyColumn(modifier = modifier.padding(16.dp)) {
-        items(transactions.size) {
-            TransactionItem(transaction = transactions[it])
+    Column(modifier = modifier.padding(16.dp)) {
+        Button(onClick = { showDialog = true }) {
+            Text(text = "New Transaction")
+        }
+
+        if (showDialog) {
+            NewTransactionDialog(
+                onDismiss = { showDialog = false },
+                onConfirm = {
+                    viewModel.insertTransaction(it)
+                    showDialog = false
+                }
+            )
+        }
+
+        LazyColumn {
+            items(transactions.size) {
+                TransactionItem(transaction = transactions[it])
+            }
         }
     }
 }
@@ -75,6 +98,41 @@ fun TransactionItem(transaction: Transaction) {
             }
             Spacer(modifier = Modifier.width(16.dp))
             Text(text = "$${transaction.amount}", style = MaterialTheme.typography.bodyLarge)
+        }
+    }
+}
+
+@Composable
+private fun NewTransactionDialog(onDismiss: () -> Unit, onConfirm: (Transaction) -> Unit) {
+    var name by remember { mutableStateOf("") }
+    var category by remember { mutableStateOf("") }
+    var amount by remember { mutableStateOf("") }
+
+    Dialog(onDismissRequest = onDismiss) {
+        Card {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Text(text = "New Transaction", style = MaterialTheme.typography.titleLarge)
+                OutlinedTextField(value = name, onValueChange = { name = it }, label = { Text("Name") })
+                OutlinedTextField(value = category, onValueChange = { category = it }, label = { Text("Category") })
+                OutlinedTextField(value = amount, onValueChange = { amount = it }, label = { Text("Amount") })
+                Row {
+                    Button(onClick = onDismiss) {
+                        Text("Cancel")
+                    }
+                    Button(onClick = {
+                        val transaction = Transaction(
+                            name = name,
+                            date = System.currentTimeMillis(),
+                            category = category,
+                            amount = amount.toDouble(),
+                            needsClarification = false
+                        )
+                        onConfirm(transaction)
+                    }) {
+                        Text("Save")
+                    }
+                }
+            }
         }
     }
 }

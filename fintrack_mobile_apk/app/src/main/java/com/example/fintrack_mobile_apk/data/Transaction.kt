@@ -11,6 +11,7 @@ import androidx.room.PrimaryKey
  * @param date The date the transaction occurred.
  * @param category The category of the transaction (e.g., "Rent Payment").
  * @param amount The value of the transaction.
+ * @param needsClarification A flag to indicate whether the transaction needs clarification from the user.
  */
 @Entity(tableName = "transactions")
 data class Transaction(
@@ -19,5 +20,6 @@ data class Transaction(
     val name: String,
     val date: Long,
     val category: String,
-    val amount: Double
+    val amount: Double,
+    val needsClarification: Boolean = false
 )

@@ -3,6 +3,7 @@ package com.example.fintrack_mobile_apk.data
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
@@ -22,6 +23,7 @@ class SettingsRepository(private val context: Context) {
     private object PreferencesKeys {
         val CURRENCY = stringPreferencesKey("currency")
         val LOCATION = stringPreferencesKey("location")
+        val SETUP_COMPLETE = booleanPreferencesKey("setup_complete")
     }
 
     /**
@@ -38,6 +40,14 @@ class SettingsRepository(private val context: Context) {
     val location: Flow<String> = context.dataStore.data
         .map { preferences ->
             preferences[PreferencesKeys.LOCATION] ?: "US"
+        }
+
+    /**
+     * A flow that emits `true` if the user has completed the setup process, and `false` otherwise.
+     */
+    val setupComplete: Flow<Boolean> = context.dataStore.data
+        .map { preferences ->
+            preferences[PreferencesKeys.SETUP_COMPLETE] ?: false
         }
 
     /**
@@ -59,6 +69,15 @@ class SettingsRepository(private val context: Context) {
     suspend fun updateLocation(location: String) {
         context.dataStore.edit { preferences ->
             preferences[PreferencesKeys.LOCATION] = location
+        }
+    }
+
+    /**
+     * Marks the setup process as complete.
+     */
+    suspend fun completeSetup() {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.SETUP_COMPLETE] = true
         }
     }
 }

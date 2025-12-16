@@ -37,4 +37,11 @@ class FintrackRepository(
     suspend fun insertTransaction(transaction: Transaction) {
         transactionDao.insert(transaction)
     }
+
+    /**
+     * Updates a transaction in the database.
+     */
+    suspend fun updateTransaction(transaction: Transaction) {
+        transactionDao.update(transaction)
+    }
 }

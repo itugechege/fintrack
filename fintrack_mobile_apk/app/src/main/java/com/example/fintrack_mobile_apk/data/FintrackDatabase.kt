@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
  * This class defines the entities and DAOs that are part of the database.
  * It also includes a mechanism to pre-populate the database with mock data when it's first created.
  */
-@Database(entities = [Account::class, Transaction::class], version = 1, exportSchema = false)
+@Database(entities = [Account::class, Transaction::class], version = 2, exportSchema = false)
 abstract class FintrackDatabase : RoomDatabase() {
 
     /**
@@ -44,6 +44,7 @@ abstract class FintrackDatabase : RoomDatabase() {
                     FintrackDatabase::class.java,
                     "fintrack_database"
                 )
+                    .fallbackToDestructiveMigration()
                     .addCallback(FintrackDatabaseCallback(context))
                     .build()
                 INSTANCE = instance
