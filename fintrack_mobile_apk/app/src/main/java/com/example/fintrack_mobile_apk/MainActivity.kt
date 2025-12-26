@@ -12,7 +12,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBalance
 import androidx.compose.material.icons.filled.Assessment
 import androidx.compose.material.icons.filled.Dashboard
-import androidx.compose.material.icons.filled.Help
 import androidx.compose.material.icons.filled.PieChart
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.filled.SyncAlt
@@ -32,7 +31,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.example.fintrack_mobile_apk.accounts.AccountsScreen
 import com.example.fintrack_mobile_apk.budget.BudgetScreen
-import com.example.fintrack_mobile_apk.clarification.ClarificationScreen
 import com.example.fintrack_mobile_apk.dashboard.DashboardScreen
 import com.example.fintrack_mobile_apk.reports.ReportsScreen
 import com.example.fintrack_mobile_apk.scheduled.ScheduledScreen
@@ -110,13 +108,12 @@ fun FintrackMobileApkApp(viewModel: FintrackViewModel) {
         Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
             val modifier = Modifier.padding(innerPadding)
             when (currentDestination) {
-                AppDestinations.DASHBOARD -> DashboardScreen(modifier = modifier, viewModel = viewModel, onNavigate = { currentDestination = it })
+                AppDestinations.DASHBOARD -> DashboardScreen(modifier = modifier, viewModel = viewModel)
                 AppDestinations.ACCOUNTS -> AccountsScreen(modifier = modifier, viewModel = viewModel)
                 AppDestinations.TRANSACTIONS -> TransactionsScreen(modifier = modifier, viewModel = viewModel)
                 AppDestinations.SCHEDULED -> ScheduledScreen(modifier = modifier, viewModel = viewModel)
                 AppDestinations.BUDGET -> BudgetScreen(modifier = modifier, viewModel = viewModel)
                 AppDestinations.REPORTS -> ReportsScreen(modifier = modifier, viewModel = viewModel)
-                AppDestinations.CLARIFICATION -> ClarificationScreen(viewModel = viewModel)
             }
         }
     }
@@ -162,12 +159,6 @@ enum class AppDestinations(
      * This screen is associated with the [ReportsScreen] composable.
      */
     REPORTS("Reports", Icons.Filled.Assessment),
-
-    /**
-     * Screen for clarifying transactions.
-     * This screen is associated with the [ClarificationScreen] composable.
-     */
-    CLARIFICATION("Clarification", Icons.Filled.Help)
 }
 
 /**

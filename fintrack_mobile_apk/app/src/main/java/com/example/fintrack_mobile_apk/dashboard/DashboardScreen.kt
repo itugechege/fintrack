@@ -24,7 +24,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.fintrack_mobile_apk.AppDestinations
 import com.example.fintrack_mobile_apk.FintrackViewModel
 import com.example.fintrack_mobile_apk.sms.SmsPermissionRequester
 import com.example.fintrack_mobile_apk.ui.theme.Fintrack_mobile_apkTheme
@@ -44,7 +43,7 @@ private const val TAG = "DashboardScreen"
  * @param viewModel The [FintrackViewModel] instance for the app.
  */
 @Composable
-fun DashboardScreen(modifier: Modifier = Modifier, viewModel: FintrackViewModel, onNavigate: (AppDestinations) -> Unit) {
+fun DashboardScreen(modifier: Modifier = Modifier, viewModel: FintrackViewModel) {
     Log.d(TAG, "DashboardScreen: Composing")
     val accounts by viewModel.allAccounts.collectAsState()
     val transactions by viewModel.allTransactions.collectAsState()
@@ -73,7 +72,7 @@ fun DashboardScreen(modifier: Modifier = Modifier, viewModel: FintrackViewModel,
     Column(modifier = modifier.padding(16.dp)) {
         if (transactionsForClarification.isNotEmpty()) {
             ClarificationCard(count = transactionsForClarification.size) {
-                onNavigate(AppDestinations.CLARIFICATION)
+                // navigate to clarification screen
             }
         }
 
