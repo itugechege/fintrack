@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.fintrack_mobile_apk.AppDestinations
 import com.example.fintrack_mobile_apk.FintrackViewModel
 import com.example.fintrack_mobile_apk.sms.SmsPermissionRequester
 import com.example.fintrack_mobile_apk.ui.theme.Fintrack_mobile_apkTheme
@@ -59,10 +60,12 @@ fun DashboardScreen(modifier: Modifier = Modifier, viewModel: FintrackViewModel)
     if (needsSmsPermission) {
         SmsPermissionRequester(
             onPermissionGranted = {
+                Log.d(TAG, "SMS permission granted. Importing transactions.")
                 needsSmsPermission = false
                 viewModel.importSmsTransactions()
             },
             onPermissionDenied = {
+                Log.d(TAG, "SMS permission denied.")
                 needsSmsPermission = false
                 // Show a message to the user explaining why the permission is needed
             }
@@ -70,23 +73,30 @@ fun DashboardScreen(modifier: Modifier = Modifier, viewModel: FintrackViewModel)
     }
 
     Column(modifier = modifier.padding(16.dp)) {
+        Text("FinanceBook", style = MaterialTheme.typography.headlineLarge, fontWeight = FontWeight.Bold)
+        Text("Personal Finance Manager", style = MaterialTheme.typography.titleMedium)
+
+        Spacer(modifier = Modifier.height(16.dp))
+
         if (transactionsForClarification.isNotEmpty()) {
+            Log.d(TAG, "Showing clarification card for ${transactionsForClarification.size} transactions")
             ClarificationCard(count = transactionsForClarification.size) {
-                // navigate to clarification screen
+                // This logic is now handled by the MainActivity dialog, but we keep the button here for visibility
+                // In a real implementation, this button might trigger the dialog explicitly
             }
         }
 
         // Summary cards
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
             SummaryCard(title = "Net Worth", amount = "$${String.format("%.2f", netWorth)}")
             SummaryCard(title = "Assets", amount = "$${String.format("%.2f", assets)}")
         }
         Row(
-            modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly
+            modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
             SummaryCard(title = "Income (Month)", amount = "$${String.format("%.2f", income)}", amountColor = Color(0xFF059669))
             SummaryCard(title = "Expenses (Month)", amount = "$${String.format("%.2f", expenses)}", amountColor = Color(0xFFB45309))
@@ -94,7 +104,10 @@ fun DashboardScreen(modifier: Modifier = Modifier, viewModel: FintrackViewModel)
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Button(onClick = { needsSmsPermission = true }) {
+        Button(onClick = { 
+            Log.d(TAG, "Import SMS Transactions button clicked")
+            needsSmsPermission = true 
+        }) {
             Text(text = "Import SMS Transactions")
         }
 
@@ -108,7 +121,7 @@ fun DashboardScreen(modifier: Modifier = Modifier, viewModel: FintrackViewModel)
         Spacer(modifier = Modifier.height(16.dp))
 
         // Account Summary
-        AccountSummary()
+        AccountSummary(accounts = accounts)
     }
 }
 
@@ -124,7 +137,7 @@ fun DashboardScreen(modifier: Modifier = Modifier, viewModel: FintrackViewModel)
 fun SummaryCard(title: String, amount: String, amountColor: Color = Color.Unspecified) {
     Card(
         modifier = Modifier.padding(4.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(text = title, style = MaterialTheme.typography.labelMedium)
@@ -181,10 +194,10 @@ fun ChartPlaceholder(title: String) {
 
 /**
  * A placeholder composable for the account summary.
- * This is used on the [DashboardScreen] to indicate where the account summary will be displayed in the future.
+ * This is used on the [DashboardScreen] to display a summary of the user's accounts.
  */
 @Composable
-fun AccountSummary() {
+fun AccountSummary(accounts: List<com.example.fintrack_mobile_apk.data.Account>) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -194,7 +207,12 @@ fun AccountSummary() {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(text = "Account Summary", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
             Spacer(modifier = Modifier.height(8.dp))
-            Text(text = "Account summary will be displayed here.")
+            accounts.forEach {
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                    Text(text = it.name)
+                    Text(text = "$${String.format("%.2f", it.balance)}")
+                }
+            }
         }
     }
 }

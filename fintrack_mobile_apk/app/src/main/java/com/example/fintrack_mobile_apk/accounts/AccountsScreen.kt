@@ -1,18 +1,25 @@
 package com.example.fintrack_mobile_apk.accounts
 
 import android.util.Log
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -48,24 +55,29 @@ fun AccountsScreen(modifier: Modifier = Modifier, viewModel: FintrackViewModel) 
     val accounts by viewModel.allAccounts.collectAsState()
     var showDialog by remember { mutableStateOf(false) }
 
-    Column(modifier = modifier.padding(16.dp)) {
-        Button(onClick = { showDialog = true }) {
-            Text(text = "New Account")
+    Scaffold(
+        modifier = modifier.fillMaxSize(),
+        floatingActionButton = {
+            FloatingActionButton(onClick = { showDialog = true }) {
+                Icon(Icons.Filled.Add, contentDescription = "New Account")
+            }
         }
+    ) { innerPadding ->
+        Column(modifier = Modifier.padding(innerPadding)) {
+            if (showDialog) {
+                NewAccountDialog(
+                    onDismiss = { showDialog = false },
+                    onConfirm = {
+                        viewModel.insertAccount(it)
+                        showDialog = false
+                    }
+                )
+            }
 
-        if (showDialog) {
-            NewAccountDialog(
-                onDismiss = { showDialog = false },
-                onConfirm = {
-                    viewModel.insertAccount(it)
-                    showDialog = false
+            LazyColumn(modifier = Modifier.padding(16.dp)) {
+                items(accounts.size) {
+                    AccountItem(account = accounts[it])
                 }
-            )
-        }
-
-        LazyColumn {
-            items(accounts.size) {
-                AccountItem(account = accounts[it])
             }
         }
     }
@@ -95,7 +107,7 @@ fun AccountItem(account: Account) {
                 Text(text = account.type, style = MaterialTheme.typography.bodySmall)
             }
             Spacer(modifier = Modifier.width(16.dp))
-            Text(text = "$${account.balance}", style = MaterialTheme.typography.bodyLarge, color = Color(account.balanceColor))
+            Text(text = "$${account.balance}", style = MaterialTheme.typography.bodyLarge, color = if (account.balance < 0) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.primary)
         }
     }
 }
